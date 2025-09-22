@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import Microfono from "../components/Microfono"; // Asegúrate de que la ruta sea correcta
 
 export default function HomePage() {
@@ -22,13 +21,10 @@ export default function HomePage() {
         <>
           {/* Logo y título */}
           <div className="text-center mb-10">
-            <Image 
-              src="/logo.png" 
-              alt="Logo" 
-              width={96} 
-              height={96}
-              className="mx-auto mb-4" 
-            />
+            {/* Logo removido temporalmente */}
+            <div className="mx-auto w-24 h-24 mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+              <span className="text-4xl">🎤</span>
+            </div>
             <h1 className="text-4xl font-bold text-gray-800">
               The AI voice platform for <span className="text-purple-600">communication</span> learning
             </h1>
