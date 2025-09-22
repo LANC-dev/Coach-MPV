@@ -53,7 +53,7 @@ export default function HomePage() {
                   <li>Generate personalized feedback</li>
                 </ul>
                 <p className="text-gray-600 mb-6">
-                  <strong>Privacy:</strong> We don't store your audio. We only process transcriptions temporarily to generate your evaluation.
+                  <strong>Privacy:</strong> We don&apos;t store your audio. We only process transcriptions temporarily to generate your evaluation.
                 </p>
                 <div className="flex justify-around">
                   <button
