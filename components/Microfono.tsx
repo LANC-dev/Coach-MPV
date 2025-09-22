@@ -1,6 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { Mic, MicOff, Play, Pause, Download, RotateCcw, Volume2, VolumeX, Loader2, CheckCircle, AlertCircle, Star, TrendingUp, Award, Target, Users, MessageCircle } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 export default function PremiumMicrofono() {
   const [currentStep, setCurrentStep] = useState(1); // 1: Setup, 2: Recording, 3: Processing, 4: Results
@@ -30,12 +29,9 @@ export default function PremiumMicrofono() {
           <span className={`text-2xl font-bold ${color}`}>{score}/5</span>
         </div>
         <div className="flex justify-center mb-2">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              className={`w-5 h-5 ${i < score ? 'text-yellow-400 fill-current' : 'text-gray-200'}`}
-            />
-          ))}
+          <span className="text-2xl">
+            {"⭐".repeat(score)}{"☆".repeat(5-score)}
+          </span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div 
@@ -49,8 +45,8 @@ export default function PremiumMicrofono() {
     );
   };
 
-  // Función de evaluación mejorada
-  const evaluar = async () => {
+  // Función de evaluación mejorada con useCallback
+  const evaluar = useCallback(async () => {
     if (!transcript) {
       alert("No hay transcripción para evaluar.");
       return;
@@ -79,7 +75,7 @@ export default function PremiumMicrofono() {
       setIsProcessing(false);
       setCurrentStep(2);
     }
-  };
+  }, [transcript, lang]);
 
   // Inicialización del SpeechRecognition
   useEffect(() => {
@@ -232,7 +228,7 @@ export default function PremiumMicrofono() {
             📝 Transcripción de la Sesión
           </h3>
           <div style="background: #f9fafb; padding: 25px; border-radius: 8px; border-left: 4px solid #3b82f6;">
-            <p style="line-height: 1.8; margin: 0; color: #4b5563; font-size: 16px;">"${transcript}"</p>
+            <p style="line-height: 1.8; margin: 0; color: #4b5563; font-size: 16px;">&ldquo;${transcript}&rdquo;</p>
           </div>
         </div>
 
@@ -337,7 +333,7 @@ export default function PremiumMicrofono() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
-                <Mic className="w-6 h-6" />
+                <span className="text-2xl">🎤</span>
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Sesión de Entrenamiento</h1>
@@ -396,7 +392,7 @@ export default function PremiumMicrofono() {
                 onClick={startListening}
                 className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 px-8 rounded-xl font-semibold text-xl hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-[1.02] flex items-center justify-center space-x-3"
               >
-                <Mic className="w-6 h-6" />
+                <span className="text-2xl">🎤</span>
                 <span>Comenzar Sesión</span>
               </button>
             </div>
@@ -416,7 +412,7 @@ export default function PremiumMicrofono() {
                       : 'bg-gradient-to-r from-green-500 to-green-600'
                   }`}
                 >
-                  {isListening ? <MicOff /> : <Mic />}
+                  <span className="text-5xl">{isListening ? '🔴' : '🎤'}</span>
                 </button>
                 
                 {isListening && (
@@ -465,7 +461,7 @@ export default function PremiumMicrofono() {
                     onClick={() => { stopListening(); evaluar(); }}
                     className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors flex items-center space-x-2"
                   >
-                    <CheckCircle className="w-5 h-5" />
+                    <span>✅</span>
                     <span>Finalizar y Evaluar</span>
                   </button>
                 </div>
@@ -479,7 +475,9 @@ export default function PremiumMicrofono() {
           <div className="p-8">
             <div className="max-w-2xl mx-auto text-center">
               <div className="mb-8">
-                <Loader2 className="w-16 h-16 text-blue-600 animate-spin mx-auto mb-6" />
+                <div className="w-16 h-16 mx-auto mb-6 animate-spin">
+                  <span className="text-6xl">⏳</span>
+                </div>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">Analizando tu comunicación</h2>
                 <p className="text-lg text-gray-600">Nuestro AI está evaluando tu desempeño...</p>
               </div>
@@ -488,15 +486,15 @@ export default function PremiumMicrofono() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-gray-700">Procesando transcripción</span>
-                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span className="text-green-500 text-xl">✅</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-700">Analizando patrones de habla</span>
-                    <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+                    <span className="text-blue-600 text-xl animate-spin">⚙️</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-700">Generando recomendaciones</span>
-                    <div className="w-5 h-5 border-2 border-gray-300 rounded-full"></div>
+                    <span className="text-gray-300 text-xl">⚪</span>
                   </div>
                 </div>
               </div>
@@ -508,7 +506,7 @@ export default function PremiumMicrofono() {
         {currentStep === 4 && evaluacion && (
           <div className="p-8">
             <div className="text-center mb-8">
-              <Award className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+              <span className="text-6xl mb-4 block">🏆</span>
               <h2 className="text-3xl font-bold text-gray-900 mb-2">¡Excelente trabajo!</h2>
               <p className="text-lg text-gray-600">Aquí están los resultados de tu sesión</p>
             </div>
@@ -524,18 +522,18 @@ export default function PremiumMicrofono() {
               {/* Transcripción */}
               <div className="bg-gray-50 p-6 rounded-xl">
                 <h3 className="font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-                  <MessageCircle className="w-5 h-5" />
+                  <span className="text-xl">💬</span>
                   <span>Tu presentación</span>
                 </h3>
                 <div className="bg-white p-4 rounded-lg border">
-                  <p className="text-gray-700 leading-relaxed italic">"{transcript}"</p>
+                  <p className="text-gray-700 leading-relaxed italic">&ldquo;{transcript}&rdquo;</p>
                 </div>
               </div>
 
               {/* Consejos */}
               <div className="bg-blue-50 p-6 rounded-xl">
                 <h3 className="font-semibold text-blue-800 mb-4 flex items-center space-x-2">
-                  <Target className="w-5 h-5" />
+                  <span className="text-xl">🎯</span>
                   <span>Recomendaciones personalizadas</span>
                 </h3>
                 <div className="space-y-3">
@@ -556,7 +554,7 @@ export default function PremiumMicrofono() {
                   onClick={descargarReporte}
                   className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-purple-800 transition-all flex items-center justify-center space-x-2"
                 >
-                  <Download className="w-5 h-5" />
+                  <span className="text-xl">📄</span>
                   <span>Descargar Reporte PDF</span>
                 </button>
                 
@@ -564,7 +562,7 @@ export default function PremiumMicrofono() {
                   onClick={isSpeaking ? detenerLectura : () => leerResultados(evaluacion)}
                   className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-blue-50 transition-colors flex items-center justify-center space-x-2"
                 >
-                  {isSpeaking ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                  <span className="text-xl">{isSpeaking ? '🔇' : '🔊'}</span>
                   <span>{isSpeaking ? 'Detener Audio' : 'Escuchar Resultados'}</span>
                 </button>
                 
@@ -572,7 +570,7 @@ export default function PremiumMicrofono() {
                   onClick={resetSession}
                   className="bg-gray-200 text-gray-700 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-300 transition-colors flex items-center justify-center space-x-2"
                 >
-                  <RotateCcw className="w-5 h-5" />
+                  <span className="text-xl">🔄</span>
                   <span>Nueva Sesión</span>
                 </button>
               </div>
@@ -589,7 +587,7 @@ export default function PremiumMicrofono() {
               <span>Sesión segura y privada</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Lock className="w-4 h-4" />
+              <span className="text-base">🔒</span>
               <span>Datos protegidos</span>
             </div>
           </div>
