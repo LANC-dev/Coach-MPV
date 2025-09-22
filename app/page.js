@@ -1,3 +1,4 @@
+"use client";
 import { useState } from 'react'
 import { Mic, ChevronDown, Play, Star, Users, Zap, BarChart3, Globe, Lock } from 'lucide-react'
 
