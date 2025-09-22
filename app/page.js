@@ -1,6 +1,6 @@
 "use client";
-
 import { useState } from "react";
+import Image from "next/image";
 import Microfono from "../components/Microfono"; // Asegúrate de que la ruta sea correcta
 
 export default function HomePage() {
@@ -22,7 +22,13 @@ export default function HomePage() {
         <>
           {/* Logo y título */}
           <div className="text-center mb-10">
-            <img src="/logo.png" alt="Logo" className="mx-auto w-24 h-24 mb-4" />
+            <Image 
+              src="/logo.png" 
+              alt="Logo" 
+              width={96} 
+              height={96}
+              className="mx-auto mb-4" 
+            />
             <h1 className="text-4xl font-bold text-gray-800">
               The AI voice platform for <span className="text-purple-600">communication</span> learning
             </h1>
@@ -30,7 +36,6 @@ export default function HomePage() {
               Create personalized coaching sessions with AI avatars and get real-time feedback on your communication skills in multiple languages with the click of a button.
             </p>
           </div>
-
           {/* Botón de generar sesión */}
           <button
             onClick={() => setShowModal(true)}
@@ -38,12 +43,11 @@ export default function HomePage() {
           >
             🚀 Generate your communication session
           </button>
-
           {/* Modal de privacidad */}
           {showModal && (
             <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
               <div className="bg-white rounded-2xl p-6 max-w-md mx-4 text-center shadow-lg">
-                <h2 className="text-2xl font-bold mb-4">🔒 Privacy & Consent</h2>
+                <h2 className="text-2xl font-bold mb-4">🔒 Privacy &amp; Consent</h2>
                 <p className="text-gray-700 mb-4">
                   To provide you with the best coaching experience, we need access to your microphone to:
                 </p>
@@ -60,7 +64,7 @@ export default function HomePage() {
                     onClick={handleAccept}
                     className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold"
                   >
-                    ✅ Accept & Continue
+                    ✅ Accept &amp; Continue
                   </button>
                   <button
                     onClick={handleCancel}
