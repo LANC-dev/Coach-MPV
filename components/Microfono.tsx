@@ -182,7 +182,7 @@ export default function PremiumMicrofono() {
 
     const html2pdf = (await import("html2pdf.js")).default;
     
-    const promedio = Object.values(evaluacion.puntajes).reduce((a: any, b: any) => a + b, 0) / Object.keys(evaluacion.puntajes).length;
+    const promedio = Object.values(evaluacion.puntajes).reduce((a: number, b: any) => a + Number(b), 0) / Object.keys(evaluacion.puntajes).length;
     const fecha = new Date().toLocaleDateString('es-ES');
     const duracion = Math.floor((180 - timeLeft) / 60);
     
