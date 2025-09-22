@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect, useRef } from "react";
 
 export default function Microfono() {
@@ -9,10 +8,8 @@ export default function Microfono() {
   const [evaluacion, setEvaluacion] = useState<any>(null);
   const [timeLeft, setTimeLeft] = useState(180);
   const [progress, setProgress] = useState(0);
-
   const recognitionRef = useRef<any>(null);
   const intervalRef = useRef<any>(null);
-
   // 🔊 Referencia para SpeechSynthesis
   const synthRef = useRef<SpeechSynthesis | null>(null);
 
@@ -35,18 +32,34 @@ export default function Microfono() {
     );
   };
 
+  // Evaluar con API
+  const evaluar = async () => {
+    if (!transcript) {
+      alert("No hay transcripción para evaluar.");
+      return;
+    }
+    setEvaluacion(null);
+    const res = await fetch("/api/evaluar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ transcript, lang }),
+    });
+    const data = await res.json();
+    setEvaluacion(data);
+    // 🔊 Leer en voz alta los resultados automáticamente
+    leerResultados(data);
+  };
+
   // Inicialización del SpeechRecognition
   useEffect(() => {
     if (typeof window !== "undefined") {
       const SpeechRecognition =
         (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
         recognition.lang = lang;
-
         recognition.onresult = (event: any) => {
           let text = "";
           for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -54,31 +67,21 @@ export default function Microfono() {
           }
           setTranscript(text);
         };
-
         recognition.onerror = (event: any) => {
-  if (event.error === "no-speech") {
-    alert("No detecté ninguna voz, intenta hablar de nuevo 🎤");
-    recognition.stop();
-
-    // Reiniciar escucha automáticamente (opcional)
-    setTimeout(() => {
-      recognition.start();
-    }, 500);
-  } else {
-    console.error("Error en reconocimiento:", event.error);
-    alert(`Ocurrió un error: ${event.error}`);
-  }
-};
-
-        recognition.onerror = (event: any) => {
-          if (event.error !== "no-speech") {
+          if (event.error === "no-speech") {
+            alert("No detecté ninguna voz, intenta hablar de nuevo 🎤");
+            recognition.stop();
+            // Reiniciar escucha automáticamente (opcional)
+            setTimeout(() => {
+              recognition.start();
+            }, 500);
+          } else {
             console.error("Error en reconocimiento:", event.error);
+            alert(`Ocurrió un error: ${event.error}`);
           }
         };
-
         recognitionRef.current = recognition;
       }
-
       // Inicializar SpeechSynthesis
       synthRef.current = window.speechSynthesis;
     }
@@ -104,7 +107,7 @@ export default function Microfono() {
       setTimeLeft(180);
     }
     return () => clearInterval(intervalRef.current);
-  }, [isListening, transcript]);
+  }, [isListening, transcript, evaluar]); // ← AGREGUÉ evaluar aquí
 
   const startListening = () => {
     if (!recognitionRef.current) {
@@ -122,33 +125,11 @@ export default function Microfono() {
     }
   };
 
-  // Evaluar con API
-  const evaluar = async () => {
-    if (!transcript) {
-      alert("No hay transcripción para evaluar.");
-      return;
-    }
-    setEvaluacion(null);
-
-    const res = await fetch("/api/evaluar", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ transcript, lang }),
-    });
-    const data = await res.json();
-    setEvaluacion(data);
-
-    // 🔊 Leer en voz alta los resultados automáticamente
-    leerResultados(data);
-  };
-
   // 🔊 Función para leer en voz alta los resultados
   const leerResultados = (data: any) => {
     if (!synthRef.current) return;
-
     // Detener cualquier lectura anterior
     synthRef.current.cancel();
-
     let texto = `Aquí están tus resultados. 
     Idioma: ${lang === "es-ES" ? "Español" : "Inglés"}.
     Transcripción: ${transcript}.
@@ -158,7 +139,6 @@ export default function Microfono() {
       .join(". ")}.
     Consejos: 
     ${data.consejos.join(". ")}.`;
-
     const utterance = new SpeechSynthesisUtterance(texto);
     utterance.lang = lang;
     synthRef.current.speak(utterance);
@@ -177,7 +157,6 @@ export default function Microfono() {
       alert("Primero debes evaluar la sesión.");
       return;
     }
-
     const html2pdf = (await import("html2pdf.js")).default;
     const element = document.createElement("div");
     element.innerHTML = `
@@ -208,7 +187,6 @@ export default function Microfono() {
         <p className="text-center text-gray-500">
           Análisis detallado de tus habilidades de comunicación
         </p>
-
         {/* Botones de grabación */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <select
@@ -242,7 +220,6 @@ export default function Microfono() {
             </button>
           )}
         </div>
-
         {/* Progreso */}
         {isListening && (
           <div>
@@ -258,13 +235,11 @@ export default function Microfono() {
             </p>
           </div>
         )}
-
         {/* Transcripción */}
         <div className="p-4 border rounded-xl bg-gray-50 min-h-[100px]">
           <p className="text-gray-600 font-medium">📝 Transcripción:</p>
           <p className="text-gray-700">{transcript || "Aquí aparecerá lo que digas..."}</p>
         </div>
-
         {/* Evaluación */}
         {evaluacion && (
           <div className="space-y-6">
@@ -275,13 +250,12 @@ export default function Microfono() {
                   key={key}
                   className="bg-gray-50 p-4 rounded-xl shadow text-center border"
                 >
-                  <p className="text-lg font-semibold text-gray-700">{value}/5</p>
+                  <p className="text-lg font-semibold text-gray-700">{String(value)}/5</p>
                   <StarRating score={Number(value)} />
                   <p className="text-sm text-gray-500 mt-1">{key}</p>
                 </div>
               ))}
             </div>
-
             {/* Consejos */}
             <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg">
               <h3 className="font-semibold text-gray-700 mb-2">💡 Consejos para Mejorar</h3>
@@ -296,7 +270,6 @@ export default function Microfono() {
                 ))}
               </ul>
             </div>
-
             {/* Botones finales */}
             <div className="flex justify-center gap-4">
               <button
