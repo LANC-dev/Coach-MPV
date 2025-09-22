@@ -1,6 +1,5 @@
 "use client";
 import { useState } from 'react'
-import { Mic, ChevronDown, Play, Star, Users, Zap, BarChart3, Globe, Lock } from 'lucide-react'
 
 export default function ColossyanInspiredLanding() {
   const [showModal, setShowModal] = useState(false)
@@ -28,18 +27,18 @@ export default function ColossyanInspiredLanding() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-black rounded-sm flex items-center justify-center">
-                <Mic className="w-5 h-5 text-white" />
+                <span className="text-white text-sm">🎤</span>
               </div>
               <span className="text-xl font-bold text-gray-900">VoiceCoach</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <div className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 cursor-pointer">
                 <span>Product</span>
-                <ChevronDown className="w-4 h-4" />
+                <span className="text-xs">▼</span>
               </div>
               <div className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 cursor-pointer">
                 <span>Resources</span>
-                <ChevronDown className="w-4 h-4" />
+                <span className="text-xs">▼</span>
               </div>
               <span className="text-gray-600 hover:text-gray-900 cursor-pointer">Pricing</span>
               <span className="text-gray-600 hover:text-gray-900 cursor-pointer">Enterprise</span>
@@ -93,7 +92,7 @@ export default function ColossyanInspiredLanding() {
 
                 <div className="mb-4">
                   <div className="flex items-center space-x-2 mb-2">
-                    <Mic className="w-4 h-4 text-gray-400" />
+                    <span className="text-gray-400 text-sm">🎤</span>
                     <span className="text-sm text-gray-500">What should your AI coach help you practice?</span>
                   </div>
                   <input 
@@ -107,7 +106,7 @@ export default function ColossyanInspiredLanding() {
                   onClick={handleStartSession}
                   className="w-full bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center space-x-2"
                 >
-                  <Zap className="w-4 h-4" />
+                  <span className="text-sm">⚡</span>
                   <span>Generate your coaching session</span>
                 </button>
                 
@@ -134,7 +133,7 @@ export default function ColossyanInspiredLanding() {
                     <div className="text-6xl">{avatars[selectedAvatar].emoji}</div>
                     {/* Animated microphone indicator */}
                     <div className="absolute bottom-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
-                      <Mic className="w-5 h-5 text-blue-600" />
+                      <span className="text-blue-600 text-lg">🎤</span>
                     </div>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800 mb-2">
@@ -144,9 +143,7 @@ export default function ColossyanInspiredLanding() {
                     Ready to analyze your communication skills and provide personalized feedback
                   </p>
                   <div className="flex justify-center items-center space-x-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                    ))}
+                    <span className="text-yellow-400 text-lg">⭐⭐⭐⭐⭐</span>
                     <span className="text-sm text-gray-500 ml-2">4.9/5 rating</span>
                   </div>
                 </div>
@@ -171,38 +168,38 @@ export default function ColossyanInspiredLanding() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: <Zap className="w-8 h-8 text-blue-600" />,
+                icon: "⚡",
                 title: "Instant Feedback",
                 description: "Get real-time analysis of your communication patterns, tone, and delivery as you speak."
               },
               {
-                icon: <BarChart3 className="w-8 h-8 text-blue-600" />,
+                icon: "📊",
                 title: "Detailed Analytics",
                 description: "Track 5 key areas: Clarity, Structure, Persuasion, Empathy, and Confidence with scoring."
               },
               {
-                icon: <Globe className="w-8 h-8 text-blue-600" />,
+                icon: "🌐",
                 title: "Multi-Language",
                 description: "Practice and improve in Spanish, English, and more languages with native-level AI coaching."
               },
               {
-                icon: <Users className="w-8 h-8 text-blue-600" />,
+                icon: "👥",
                 title: "AI Coaches",
                 description: "Choose from different AI personalities and coaching styles that match your learning preference."
               },
               {
-                icon: <Lock className="w-8 h-8 text-blue-600" />,
+                icon: "🔒",
                 title: "Privacy First",
                 description: "Your voice data is processed securely and never stored permanently. Complete privacy guaranteed."
               },
               {
-                icon: <Play className="w-8 h-8 text-blue-600" />,
+                icon: "📱",
                 title: "Practice Anywhere",
                 description: "Web-based platform works on any device. Practice presentations, meetings, or conversations."
               }
             ].map((feature, index) => (
               <div key={index} className="p-6">
-                <div className="mb-4">{feature.icon}</div>
+                <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>
               </div>
@@ -260,7 +257,7 @@ export default function ColossyanInspiredLanding() {
           <div className="text-center">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <div className="w-8 h-8 bg-black rounded-sm flex items-center justify-center">
-                <Mic className="w-5 h-5 text-white" />
+                <span className="text-white text-sm">🎤</span>
               </div>
               <span className="text-xl font-bold text-gray-900">VoiceCoach</span>
             </div>
@@ -273,7 +270,7 @@ export default function ColossyanInspiredLanding() {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-8 max-w-md w-full">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">🔒 Privacy & Consent</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">🔒 Privacy &amp; Consent</h3>
             <p className="text-gray-600 mb-4">
               To provide you with the best coaching experience, we need access to your microphone to:
             </p>
@@ -284,7 +281,7 @@ export default function ColossyanInspiredLanding() {
             </ul>
             <div className="bg-green-50 p-4 rounded-lg mb-6">
               <p className="text-sm text-green-800">
-                <strong>Privacy guaranteed:</strong> We don't store your audio. We only process transcriptions temporarily to generate your evaluation.
+                <strong>Privacy guaranteed:</strong> We don&apos;t store your audio. We only process transcriptions temporarily to generate your evaluation.
               </p>
             </div>
             <div className="flex gap-4">
@@ -292,7 +289,7 @@ export default function ColossyanInspiredLanding() {
                 onClick={handleAccept}
                 className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
-                Accept & Continue
+                Accept &amp; Continue
               </button>
               <button
                 onClick={() => setShowModal(false)}
